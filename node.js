@@ -36,7 +36,34 @@ app.get('/add-book/:title/:author', (req, res) => {
         }
     })
 })
- 
+ app.get('/delete-book/:id', (req,res)=>{
+    const id = req.params.id;
+    const sql = 'DELETE FROM books WHERE `books`.`id` = ' + id + ';';
+    con.query(sql, [id], (err, result) => {
+        if (err) {
+            console.log(err)
+            res.send("Nie udało się usunąć książki")
+        } else {
+            res.send("Książka usunięta pomyślnie")
+            console.log("Usunięto książkę")
+        }
+    })
+ })
+ app.get('/edit-book/:id/:title/:author', (req, res) => {
+    const id = req.params.id
+    const title = req.params.title
+    const author = req.params.author
+    const sql = "UPDATE books SET title = ?, author = ? WHERE id = ?"
+    con.query(sql, [title, author, id], (err, result) => {
+        if (err) {
+            console.log(err)
+            res.send("Nie udało się edytować książki")
+        } else {
+            res.send("Książka edytowana pomyślnie")
+            console.log("Edytowano książkę")
+        }
+    })
+})
 app.get('/books', (req, res) => {
     const sql = "SELECT * FROM books"
     con.query(sql, (err, data) => {
